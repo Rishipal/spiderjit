@@ -4,6 +4,8 @@ from ir.module import *
 from ir.context import *
 from ir.irbuilder import *
 from ir.constants import *
+from optimizer.passmanager import *
+from optimizer.basicpass import *
 
 int32Ty = IntType(32)
 floatTy = FloatType()
@@ -49,6 +51,12 @@ def main():
     print(mod)
     mod.validate()
 
+    print("Running Passmanager:")
+    print("-" * 50)
+    passmgr = PassManager()
+    passmgr.add_module_pass(PrintFunctionsPass())
+    passmgr.add_function_pass(PrintBasicBlocksPass())
+    passmgr.run(mod)
 
 if __name__ == "__main__":
     main()
