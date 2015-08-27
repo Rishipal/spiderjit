@@ -1,5 +1,7 @@
 # Spider JIT
 
+[![Join the chat at https://gitter.im/ssarangi/spiderjit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ssarangi/spiderjit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Spider JIT is a project inspired by llvmlite & SpiderMonkey. While working with llvmlite I wanted to write a small jitter which could jit python programs. Currently, the tasks
 I am doing are these
 
