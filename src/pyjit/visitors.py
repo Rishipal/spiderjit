@@ -7,7 +7,6 @@ import ctypes
 import inspect
 import pprint
 import string
-import numpy as np
 
 from textwrap import dedent
 from collections import deque, defaultdict
@@ -53,6 +52,9 @@ class PythonVisitor(ast.NodeVisitor):
     def visit_Bool(self, node):
         return LitBool(node.n)
 
+    def visit_Str(self, node):
+        return LitString(node.s)
+
     def visit_Call(self, node):
         name = self.visit(node.func)
         args = map(self.visit, node.args)
@@ -80,6 +82,28 @@ class PythonVisitor(ast.NodeVisitor):
         args = [self.visit(arg) for arg in node.args.args]
         res = Func(node.name, args, stmts)
         return res
+
+    def visit_Compare(self, node):
+        print(dir(node))
+        print(node.left)
+        lhs = self.visit(node.left)
+        print(node.ops[0])
+        ops = self.visit(node.ops[0])
+        print(node.comparators)
+        comparator = self.visit(node.comparators)
+        print(comparator)
+        return Compare()
+
+    def visit_If(self, node):
+        print(dir(node))
+        var = self.visit(node.test)
+        stmts = list(node.body)
+        stmts = [self.visit(stmt) for stmt in stmts]
+        return If(None, None, None, stmts)
+
+    def visit_List(self, node):
+        elts = [self.visit(elt) for elt in node.elts]
+        return ListTy(elts)
 
     def visit_arg(self, node):
         return Var(node.arg)
@@ -137,4 +161,4 @@ class PythonVisitor(ast.NodeVisitor):
             raise NotImplementedError
 
     def generic_visit(self, node):
-        raise NotImplementedError
+        raise NotImplementedError("Visitor class doesn't implement %s" % type(node))

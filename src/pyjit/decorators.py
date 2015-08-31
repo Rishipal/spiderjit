@@ -3,6 +3,7 @@ __author__ = 'sarangis'
 from pyjit.visitors import *
 from pyjit.type_infer import *
 from pyjit.codegen import *
+import numpy as np
 
 def arg_pytype(arg):
     if isinstance(arg, np.ndarray):
@@ -55,10 +56,19 @@ def autojit(fn):
 
 def typeinfer(ast):
     infer = InferType()
-    ty = infer.visit(ast)
-    mgu = solve(infer.constraints)
-    infer_ty = apply(mgu, ty)
-    return (infer_ty, mgu)
+    sig = infer.visit(ast)
+
+    print('Signature:%s \n' % sig)
+
+    print('Constraints:')
+    for (a,b) in infer.constraints:
+        print(a, '~', b)
+
+    # mgu = solve(infer.constraints)
+    TypeSolver.solve(infer.constraints)
+    # infer_ty = apply(mgu, sig)
+    # return (infer_ty, mgu)
+    return (None, None)
 
 def codegen(ast, specializer, retty, argtys):
     cgen = IREmitter(specializer, retty, argtys)
