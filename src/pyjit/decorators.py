@@ -1,7 +1,8 @@
-__author__ = 'sarangis'
+﻿__author__ = 'sarangis'
 
 from pyjit.visitors import *
 from pyjit.type_infer import *
+from pyjit.codegen import *
 from pyjit.codegen import *
 import numpy as np
 
@@ -51,8 +52,11 @@ def specialize(ast, infer_ty, mgu):
 def autojit(fn):
     transformer = PythonVisitor()
     ast = transformer(fn)
-    (ty, mgu) = typeinfer(ast)
-    return specialize(ast, ty, mgu)
+    #(ty, mgu) = typeinfer(ast)
+    #return specialize(ast, ty, mgu)
+    iremitter = IREmitter("MyModule")
+    iremitter.visit(ast)
+    module = iremitter.module()
 
 def typeinfer(ast):
     infer = InferType()
@@ -64,7 +68,7 @@ def typeinfer(ast):
     for (a,b) in infer.constraints:
         print(a, '~', b)
 
-    # mgu = solve(infer.constraints)
+    mgu = solve(infer.constraints)
     TypeSolver.solve(infer.constraints)
     # infer_ty = apply(mgu, sig)
     # return (infer_ty, mgu)

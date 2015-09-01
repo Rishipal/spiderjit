@@ -1,4 +1,4 @@
-__author__ = 'sarangis'
+﻿__author__ = 'sarangis'
 
 from ir.module import *
 from ir.context import *
@@ -8,6 +8,7 @@ from optimizer.passmanager import *
 from optimizer.basicpass import *
 from pyjit.pretty_print import *
 from pyjit.decorators import *
+from vm.vm import *
 
 int32Ty = IntType(32)
 floatTy = FloatType()
@@ -60,6 +61,9 @@ def generate_ir():
     passmgr.add_function_pass(PrintBasicBlocksPass())
     passmgr.run(mod)
 
+    vm = VirtualMachine()
+    vm.visit(mod)
+
 # @autojit
 # def addup(n):
 #     x = 1
@@ -67,19 +71,19 @@ def generate_ir():
 #         n += 1 + x
 #     return n
 
-# @autojit
-# def add(a, b):
-#     c = a + b
-#     return c
+@autojit
+def add(a, b):
+    c = a + b
+    return c
 
 # @autojit
 # def addone(a):
 #     return a + 1
 
-@autojit
-def addstring(one, two):
-    two = two + "testx"
-    return "hello" + one + two
+#@autojit
+#def addstring(one, two):
+#    two = two + "testx"
+#    return "hello" + one + two
 
 # @autojit
 # def test_conditional():

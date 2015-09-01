@@ -1,7 +1,8 @@
-__author__ = 'sarangis'
+﻿__author__ = 'sarangis'
 
 import string
 from pyjit.nodes import *
+from utils.base_visitor import *
 
 def naming():
     k = 0
@@ -9,7 +10,7 @@ def naming():
         for a in string.ascii_lowercase:
             yield ("'" + a + str(k)) if (k > 0) else (a)
 
-class InferType(object):
+class InferType(BaseVisitor):
     def __init__(self):
         self.constraints = []
         self.env = {}

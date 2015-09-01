@@ -1,4 +1,4 @@
-__author__ = 'sarangis'
+﻿__author__ = 'sarangis'
 
 import ast
 from functools import reduce
@@ -13,6 +13,11 @@ class Var(ast.AST):
     def __init__(self, id, type=None):
         self.id = id
         self.type = type
+
+    def __str__(self):
+        return self.id
+
+    __repr__ = __str__
 
 class Assign(ast.AST):
     _fields = ["ref", "val", "type"]
