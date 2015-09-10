@@ -1,4 +1,4 @@
-﻿__author__ = 'sarangis'
+__author__ = 'sarangis'
 
 import ast
 from functools import reduce

@@ -15,7 +15,7 @@ class Argument(Value):
 
     @property
     def name(self):
-        return self.name
+        return self.__name
 
     @property
     def type(self):

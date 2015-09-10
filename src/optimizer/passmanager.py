@@ -1,6 +1,5 @@
 __author__ = 'sarangis'
 
-from ir.validator import *
 from ir.module import *
 from optimizer.pass_support import *
 

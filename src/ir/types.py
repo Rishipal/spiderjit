@@ -60,6 +60,19 @@ class ByteType(IntType):
     def __str__(self):
         return str(IntType.__str__())
 
+class VectorType(BaseType):
+    def __init__(self, base_ty, numElts):
+        self.__baseTy = base_ty
+        self.__numElts = numElts
+
+    @property
+    def baseTy(self):
+        return self.__baseTy
+
+    @property
+    def numElts(self):
+        return self.__numElts
+
 class PointerType(BaseType):
     def __init__(self, base_type, address_space):
         if not isinstance(base_type, BaseType):

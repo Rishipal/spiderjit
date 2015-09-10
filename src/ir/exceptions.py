@@ -1,4 +1,4 @@
-__author__ = 'sarangis'
+﻿__author__ = 'sarangis'
 
 class IllegalArgumentException(ValueError):
     pass
@@ -16,4 +16,7 @@ class NoBBTerminatorException(ValueError):
     pass
 
 class InvalidUsageModel(ValueError):
+    pass
+
+class PassNotRunException(ValueError):
     pass

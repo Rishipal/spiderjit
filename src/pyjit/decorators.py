@@ -49,6 +49,7 @@ def specialize(ast, infer_ty, mgu):
         #     raise UnderDeteremined()
     return _wrapper
 
+
 def autojit(fn):
     transformer = PythonVisitor()
     ast = transformer(fn)
@@ -57,6 +58,7 @@ def autojit(fn):
     iremitter = IREmitter("MyModule")
     iremitter.visit(ast)
     module = iremitter.module()
+
 
 def typeinfer(ast):
     infer = InferType()
@@ -73,6 +75,7 @@ def typeinfer(ast):
     # infer_ty = apply(mgu, sig)
     # return (infer_ty, mgu)
     return (None, None)
+
 
 def codegen(ast, specializer, retty, argtys):
     cgen = IREmitter(specializer, retty, argtys)

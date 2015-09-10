@@ -2,10 +2,10 @@ class BaseVisitor(object):
     def __init__(self):
         pass
 
-    def visit(self, node):
+    def visit(self, node, *args):
         name = "visit_%s" % type(node).__name__.lower()
         if hasattr(self, name):
-            return getattr(self, name)(node)
+            return getattr(self, name)(node, *args)
         else:
             return self.generic_visit(node)
 

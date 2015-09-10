@@ -4,14 +4,14 @@ class ModulePass:
     def __init__(self):
         pass
 
-    def run_on_module(self):
+    def run_on_module(self, node):
         raise NotImplementedError("Derived passes class should implement run_on_module")
 
 class FunctionPass:
     def __init__(self):
         pass
 
-    def run_on_function(self):
+    def run_on_function(self, node):
         raise NotImplementedError("Derived passes class should implement run_on_function")
 
 

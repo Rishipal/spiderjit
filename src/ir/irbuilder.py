@@ -1,4 +1,4 @@
-__author__ = 'sarangis'
+﻿__author__ = 'sarangis'
 
 from ir.types import *
 from ir.function import *
@@ -90,19 +90,33 @@ class IRBuilder:
         f = Function(name, ftype)
         return f
 
-    def create_basic_block(self, name, parent):
-        return BasicBlock(name, parent)
+    def set_entry_point(self, function):
+        self.__module.entry_point = function
 
-    def create_return(self, value = None):
-        ret_inst = ReturnInstruction()
+    def create_global(self, name, initializer):
+        g = Global(name, initializer)
+        self.__module.add_global(g)
+
+    def create_basic_block(self, name, parent):
+        bb = BasicBlock(name, parent)
+        return bb
+
+    def create_return(self, value = None, name=None):
+        ret_inst = ReturnInstruction(value)
         self.__add_instruction(ret_inst)
 
-    def create_branch(self, bb):
+    def create_branch(self, bb, name=None):
         if not isinstance(bb, BasicBlock):
             raise InvalidTypeException("Expected a Basic Block")
 
-        branch_inst = BranchInstruction(bb)
+        branch_inst = BranchInstruction(bb, self.__current_bb, name)
         self.__add_instruction(branch_inst)
+        return branch_inst
+
+    def create_cond_branch(self, cmp_inst, value, bb_true, bb_false, name=None):
+        cond_branch = ConditionalBranchInstruction(cmp_inst, value, bb_true, bb_false, self.__current_bb, name)
+        self.__add_instruction(cond_branch)
+        return cond_branch
 
     def create_call(self, func, *args, name=None):
         call_inst = CallInstruction(func, list(args), self.__current_bb, name)
@@ -148,3 +162,60 @@ class IRBuilder:
         fdiv_inst = FDivInstruction(lhs, rhs, self.__current_bb, name)
         self.__add_instruction(fdiv_inst)
         return fdiv_inst
+
+    def create_icmp(self, lhs, rhs, name=None):
+        icmp_inst = ICmpInstruction(CompareTypes.SLE, lhs, rhs, self.__current_bb, name)
+        self.__add_instruction(icmp_inst)
+        return icmp_inst
+
+    def create_select(self, cond, val_true, val_false, name=None):
+        select_inst = SelectInstruction(cond, val_true, val_false, self.__current_bb, name)
+        self.__add_instruction(select_inst)
+        return select_inst
+
+    def create_alloca(self, type, numEls=None, align=None, name=None):
+        alloca_inst = AllocaInstruction(type, numEls, align, self.__current_bb, name)
+        self.__add_instruction(alloca_inst)
+        return alloca_inst
+
+    def create_load(self):
+        pass
+
+    def create_store(self):
+        pass
+
+    def create_shl(self, op1, op2, name=None):
+        shl_inst = ShiftLeftInstruction(op1, op2, self.__current_bb, name)
+        self.__add_instruction(shl_inst)
+        return shl_inst
+
+    def create_lshr(self, op1, op2, name=None):
+        lshr_inst = LogicalShiftRightInstruction(op1, op2, self.__current_bb, name)
+        self.__add_instruction(lshr_inst)
+        return lshr_inst
+
+    def create_ashr(self, op1, op2, name=None):
+        ashr_inst = ArithmeticShiftRightInstruction(op1, op2, self.__current_bb, name)
+        self.__add_instruction(ashr_inst)
+        return ashr_inst
+
+    def create_and(self, op1, op2, name=None):
+        and_inst = AndInstruction(op1, op2, self.__current_bb, name)
+        self.__add_instruction(and_inst)
+        return and_inst
+
+    def create_or(self, op1, op2, name=None):
+        or_inst = OrInstruction(op1, op2, self.__current_bb, name)
+        self.__add_instruction(or_inst)
+        return or_inst
+
+    def create_xor(self, op1, op2, name=None):
+        xor_inst = XorInstruction(op1, op2, self.__current_bb, name)
+        self.__add_instruction(xor_inst)
+        return xor_inst
+
+    def create_vector(self, baseTy, numElts, name=None):
+        vecTy = VectorType(baseTy, numElts)
+        alloca = self.create_alloca(vecTy, 1, None, name)
+        vec = self.create_load(alloca)
+        return vec

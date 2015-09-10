@@ -1,4 +1,4 @@
-__author__ = 'sarangis'
+﻿__author__ = 'sarangis'
 
 from ir.exceptions import *
 from ir.validator import *
@@ -14,13 +14,13 @@ class Module(Validator):
         self.__func_declarations = []
         self.__data_layout = []
         self.__target_arch = ""
+        self.__entry_point = None
 
     @property
     def globals(self):
         return self.__globals
 
-    @globals.setter
-    def globals(self, globalv):
+    def add_global(self, globalv):
         self.__globals.append(globalv)
 
     @property
@@ -58,6 +58,15 @@ class Module(Validator):
     @property
     def context(self):
         return self.__context
+
+    @property
+    def entry_point(self):
+        return self.__entry_point
+
+    @entry_point.setter
+    def entry_point(self, function):
+        assert function in self.__functions, "Function not present in module"
+        self.__entry_point = function
 
     def __str__(self):
         output_str = ""

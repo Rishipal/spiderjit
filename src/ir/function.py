@@ -1,10 +1,32 @@
-__author__ = 'sarangis'
+﻿__author__ = 'sarangis'
 
 from ir.exceptions import *
 from ir.types import *
 import ir.instructions
 from ir.validator import *
 from ir.value import *
+
+class Global:
+    def __init__(self, name, initializer):
+        self.__name = name
+        self.__initializer = initializer
+
+    @property
+    def type(self):
+        return self.__initializer.type
+
+    @property
+    def name(self):
+        return self.__name
+
+    @property
+    def initializer(self):
+        return self.__initializer
+
+    def __str__(self):
+        return "%" + self.__name + " = " + str(self.__initializer)
+ 
+    __repr__ = __str__
 
 class NameGenerator:
     def __init__(self):
@@ -148,7 +170,7 @@ class Function(Validator):
 
         # render each basic block
         for bb in self.__basic_blocks:
-            output_str += str(bb)
+            output_str += bb.render()
 
         output_str += "}\n\n"
         return output_str
